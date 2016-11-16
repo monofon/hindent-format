@@ -1,6 +1,6 @@
-# Pandoc Format
+# Hindent Format
 
-A formatter for Markdown using [Pandoc](http://pandoc.org).
+A Visual Studio Code formatter for Haskell using [hindent](https://github.com/chrisdone/hindent).
 
 ## Features
 
@@ -8,10 +8,10 @@ A formatter for Markdown using [Pandoc](http://pandoc.org).
 
 ## Requirements
 
-Requires [Pandoc](http://pandoc.org) to be installed.
+Requires [hindent](https://github.com/chrisdone/hindent) to be installed.
 
 ## Release Notes
 
 ### 0.0.1
 
-Initial release.
+Initial release. Developed and tested on macOS.

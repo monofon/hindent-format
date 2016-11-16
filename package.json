@@ -24,7 +24,7 @@
                     "type": [
                         "string"
                     ],
-                    "default": "/Users/henrik/.local/bin/hindent --style johan-tibell --line-length 100",
+                    "default": "hindent --style johan-tibell --line-length 100",
                     "description": "Specifies the hindent invocation with options."
                 }
             }

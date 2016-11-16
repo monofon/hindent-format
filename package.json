@@ -4,6 +4,7 @@
     "description": "Format Haskell source code with hindent.",
     "version": "0.0.1",
     "publisher": "monofon",
+    "repository": "https://github.com/monofon/hindent-format",
     "engines": {
         "vscode": "^1.7.0"
     },

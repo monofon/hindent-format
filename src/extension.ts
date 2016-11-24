@@ -11,11 +11,20 @@ class HindentFormatEditsProvider implements
 
   constructor() {
     const config = vscode.workspace.getConfiguration('hindentFormat');
-    const commandline = config.get('command', '/usr/local/bin/hindent');
+    const commandline = config.get('command', 'hindent');
     const args = commandline.split(' ');
 
     this.command = args[0];
     this.arguments = args.slice(1);
+
+    // Use `editor.wrappingColumn` if no line width is given on the hindent
+    // commandline.
+    if (this.arguments.indexOf('--line-width') == -1) {
+      const wrappingColumn = vscode.workspace.getConfiguration('editor').get(
+          'wrappingColumn', '80');
+      this.arguments.push('--line-width');
+      this.arguments.push(wrappingColumn);
+    }
   }
 
   formatHindent(text: string) {
@@ -24,7 +33,7 @@ class HindentFormatEditsProvider implements
     if (!result.status) {
       return result.stdout.toString();
     } else {
-      vscode.window.showErrorMessage(result.stderr.toString());
+      vscode.window.showWarningMessage(result.stderr.toString());
       return text;
     }
   }

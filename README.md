@@ -14,4 +14,12 @@ Requires [hindent](https://github.com/chrisdone/hindent) to be installed.
 
 ### 0.0.1
 
-Initial release. Developed and tested on macOS.
+-   Initial release. Developed and tested on macOS.
+
+### 0.0.2
+
+-   Removed directory from the hindent default command path.
+
+### 0.0.3
+
+-   Use `editor.wrappingColumn` if no line width is given on the hindent commandline.

@@ -2,7 +2,7 @@
     "name": "hindent-format",
     "displayName": "Hindent Format",
     "description": "Format Haskell source code with hindent.",
-    "version": "0.0.2",
+    "version": "0.0.3",
     "publisher": "monofon",
     "repository": "https://github.com/monofon/hindent-format",
     "engines": {
@@ -24,7 +24,7 @@
                     "type": [
                         "string"
                     ],
-                    "default": "hindent --style johan-tibell --line-length 100",
+                    "default": "hindent",
                     "description": "Specifies the hindent invocation with options."
                 }
             }

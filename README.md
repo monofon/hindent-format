@@ -1,6 +1,7 @@
 # Hindent Format
 
-A Visual Studio Code formatter for Haskell using [hindent](https://github.com/chrisdone/hindent).
+A Visual Studio Code formatter for Haskell using
+[hindent](https://github.com/chrisdone/hindent).
 
 ## Features
 
@@ -22,4 +23,9 @@ Requires [hindent](https://github.com/chrisdone/hindent) to be installed.
 
 ### 0.0.3
 
--   Use `editor.wrappingColumn` if no line width is given on the hindent commandline.
+-   Use `editor.wrappingColumn` if no line width is given on the
+    hindent commandline.
+
+### 0.0.4
+
+-   Fix hindent command line option spelling (fixes \#1).

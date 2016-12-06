@@ -6,35 +6,48 @@ import * as child_process from 'child_process';
 class HindentFormatEditsProvider implements
     vscode.DocumentFormattingEditProvider,
     vscode.DocumentRangeFormattingEditProvider {
-  command: string;
-  arguments: Array<string>;
+  command: string = null;
+  arguments: Array<string> = null;
 
-  constructor() {
+  constructor() { this.configure(); }
+
+  configure() {
     const config = vscode.workspace.getConfiguration('hindentFormat');
     const commandline = config.get('command', 'hindent');
     const args = commandline.split(' ');
 
-    this.command = args[0];
-    this.arguments = args.slice(1);
+    let result = child_process.spawnSync(args[0], ['--version']);
+    if (!result.status) {
+      this.command = args[0];
+      this.arguments = args.slice(1);
 
-    // Use `editor.wrappingColumn` if no line width is given on the hindent
-    // commandline.
-    if (this.arguments.indexOf('--line-width') == -1) {
-      const wrappingColumn = vscode.workspace.getConfiguration('editor').get(
-          'wrappingColumn', '80');
-      this.arguments.push('--line-width');
-      this.arguments.push(wrappingColumn);
+      // Use `editor.wrappingColumn` if no line width is given on the hindent
+      // commandline.
+      if (this.arguments.indexOf('--line-length') == -1) {
+        const wrappingColumn = vscode.workspace.getConfiguration('editor').get(
+            'wrappingColumn', '80');
+        this.arguments.push('--line-length');
+        this.arguments.push(wrappingColumn);
+      }
+    } else {
+      this.command = null;
+      this.arguments = null;
     }
   }
 
   formatHindent(text: string) {
-    let result =
-        child_process.spawnSync(this.command, this.arguments, {'input': text});
-    if (!result.status) {
-      return result.stdout.toString();
+    if (this.command != null) {
+      let result = child_process.spawnSync(
+          this.command, this.arguments, {'input': text});
+      if (!result.status) {
+        return result.stdout.toString();
+      } else {
+        // TODO Make warning widget disappear after 5 seconds.
+        vscode.window.showWarningMessage(result.stderr.toString());
+        return text;
+      }
     } else {
-      vscode.window.showWarningMessage(result.stderr.toString());
-      return text;
+      return '';
     }
   }
 
@@ -45,6 +58,7 @@ class HindentFormatEditsProvider implements
     let formatted = this.formatHindent(document.getText());
     if (formatted != '')
       return [vscode.TextEdit.replace(
+          // FIX How to specify an infinite range?
           new vscode.Range(0, 0, 10000, 10000), formatted)];
     else
       return [];
@@ -63,11 +77,17 @@ class HindentFormatEditsProvider implements
 }
 
 export function activate(context: vscode.ExtensionContext) {
+  // TODO Do not activate, if hindent cannot be executed.
   let hindentFormatProvider = new HindentFormatEditsProvider();
+
   vscode.languages.registerDocumentFormattingEditProvider(
       'haskell', hindentFormatProvider);
   vscode.languages.registerDocumentRangeFormattingEditProvider(
       'haskell', hindentFormatProvider);
+
+  vscode.workspace.onDidChangeConfiguration(function(event) {
+    hindentFormatProvider.configure();
+  });
 }
 
 export function deactivate() {}

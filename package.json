@@ -2,7 +2,7 @@
     "name": "hindent-format",
     "displayName": "Hindent Format",
     "description": "Format Haskell source code with hindent.",
-    "version": "0.0.3",
+    "version": "0.0.5",
     "publisher": "monofon",
     "repository": "https://github.com/monofon/hindent-format",
     "engines": {

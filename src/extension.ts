@@ -56,10 +56,10 @@ class HindentFormatEditsProvider implements
       token: vscode.CancellationToken):
       vscode.TextEdit[]|Thenable<vscode.TextEdit[]> {
     let formatted = this.formatHindent(document.getText());
-    if (formatted != '')
-      return [vscode.TextEdit.replace(
-          // FIX How to specify an infinite range?
-          new vscode.Range(0, 0, 10000, 10000), formatted)];
+    if (formatted != '') {
+      let range = document.validateRange(new vscode.Range(0, 0, Number.MAX_VALUE, Number.MAX_VALUE));
+      return [vscode.TextEdit.replace(range, formatted)];
+    }
     else
       return [];
   }

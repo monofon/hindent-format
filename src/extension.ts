@@ -2,6 +2,7 @@
 
 import * as vscode from 'vscode';
 import * as child_process from 'child_process';
+import { Position } from 'vscode';
 
 class HindentFormatEditsProvider implements
     vscode.DocumentFormattingEditProvider,
@@ -84,6 +85,18 @@ export function activate(context: vscode.ExtensionContext) {
       'haskell', hindentFormatProvider);
   vscode.languages.registerDocumentRangeFormattingEditProvider(
       'haskell', hindentFormatProvider);
+  vscode.commands.registerTextEditorCommand('haskell.hindent',
+    (textEditor: vscode.TextEditor, textEditorEdit: vscode.TextEditorEdit) => {
+    const document = textEditor.document;
+    const newText = new HindentFormatEditsProvider().formatHindent(document.getText());
+    const documentRange = new vscode.Range(
+      new vscode.Position(0, 0),
+      document.lineAt(document.lineCount - 1).range.end
+    )
+
+
+    textEditorEdit.replace(documentRange, newText);
+  });
 
   vscode.workspace.onDidChangeConfiguration(function(event) {
     hindentFormatProvider.configure();

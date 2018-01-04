@@ -28,7 +28,13 @@
                     "description": "Specifies the hindent invocation with options."
                 }
             }
-        }
+        },
+        "commands": [
+            {
+              "command": "haskell.hindent",
+              "title": "hindent current file"
+            }
+          ]
     },
     "scripts": {
         "vscode:prepublish": "tsc -p ./",

@@ -2,11 +2,10 @@
     "name": "hindent-format",
     "displayName": "Hindent Format",
     "description": "Format Haskell source code with hindent.",
-    "version": "0.0.5",
+    "version": "0.0.6",
     "publisher": "monofon",
-    "repository": "https://github.com/monofon/hindent-format",
     "engines": {
-        "vscode": "^1.7.0"
+        "vscode": "^1.23.0"
     },
     "categories": [
         "Formatters"
@@ -31,15 +30,17 @@
         }
     },
     "scripts": {
-        "vscode:prepublish": "tsc -p ./",
-        "compile": "tsc -watch -p ./",
-        "postinstall": "node ./node_modules/vscode/bin/install"
+        "vscode:prepublish": "npm run compile",
+        "compile": "tsc -p ./",
+        "watch": "tsc -watch -p ./",
+        "postinstall": "node ./node_modules/vscode/bin/install",
+        "test": "npm run compile && node ./node_modules/vscode/bin/test"
     },
     "devDependencies": {
-        "typescript": "^2.0.3",
-        "vscode": "^1.0.0",
-        "mocha": "^2.3.3",
-        "@types/node": "^6.0.40",
-        "@types/mocha": "^2.2.32"
+        "typescript": "^2.6.1",
+        "vscode": "^1.1.6",
+        "tslint": "^5.8.0",
+        "@types/node": "^7.0.43",
+        "@types/mocha": "^2.2.42"
     }
 }

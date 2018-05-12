@@ -2,6 +2,10 @@
     "name": "hindent-format",
     "displayName": "Hindent Format",
     "description": "Format Haskell source code with hindent.",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/monofon/hindent-format"
+    },
     "version": "0.0.6",
     "publisher": "monofon",
     "engines": {
@@ -17,14 +21,21 @@
     "contributes": {
         "configuration": {
             "type": "object",
-            "title": "Hindent command line",
+            "title": "Hindent configuration",
             "properties": {
-                "hindentFormat.command": {
+                "hindent-format.command": {
                     "type": [
                         "string"
                     ],
                     "default": "hindent",
                     "description": "Specifies the hindent invocation with options."
+                },
+                "hindent-format.enable": {
+                    "type": [
+                        "boolean"
+                    ],
+                    "default": "true",
+                    "description": "Enable hindent formatting."
                 }
             }
         }

@@ -2,50 +2,52 @@
 
 import * as vscode from 'vscode';
 import * as child_process from 'child_process';
+import * as path from 'path';
 
 class HindentFormatEditsProvider implements
   vscode.DocumentFormattingEditProvider,
   vscode.DocumentRangeFormattingEditProvider {
-  hindentFound: boolean = false;
+  hindentAvailable: boolean = false;
+  enable: boolean = true;
   command: string = "hindent";
   arguments: Array<string> = [];
 
   constructor() { this.configure(); }
 
   configure() {
-    const config = vscode.workspace.getConfiguration('hindentFormat');
-    const commandline = config.get('command', 'hindent');
-    const args = commandline.split(' ');
+    const config = vscode.workspace.getConfiguration('hindent-format');
+    this.enable = config.get('enable', true);
+    this.command = config.get('command', 'hindent');
 
-    let result = child_process.spawnSync(args[0], ['--version']);
-    if (!result.status) {
-      this.hindentFound = true;
-      this.command = args[0];
-      this.arguments = args.slice(1);
+    if (this.enable) {
+      let result = child_process.spawnSync(this.command, ['--version']);
+      if (!result.status) {
+        this.hindentAvailable = true;
 
-      // Use `editor.wrappingColumn` if no line width is given on the hindent
-      // commandline.
-      if (this.arguments.indexOf('--line-length') === -1) {
-        const wrappingColumn = vscode.workspace.getConfiguration('editor').get(
-          'wrappingColumn', '80');
-        this.arguments.push('--line-length');
-        this.arguments.push(wrappingColumn);
+        console.log("hindent-format using: " + this.command);
+      } else {
+        this.hindentAvailable = false;
+        vscode.window.showWarningMessage("hindent-format: cannot execute hindent command: " + this.command);
       }
     }
   }
 
   formatHindent(text: string) {
-    if (this.hindentFound) {
-      let result = child_process.spawnSync(
-        this.command, this.arguments, { 'input': text });
-      if (!result.status) {
-        return result.stdout.toString();
-      } else {
-        // TODO Make warning widget disappear after 5 seconds.
-        vscode.window.showWarningMessage(result.stderr.toString().split('\n')[0]);
-        return '';
-      }
+    let cwd = '.';
+    // May this helps hindent pick up the .hindent.yaml file
+    if (vscode.window.activeTextEditor) {
+      let documentPath = vscode.window.activeTextEditor.document.uri.fsPath;
+      cwd = path.dirname(documentPath);
+    }
+    let result = child_process.spawnSync(
+      this.command, this.arguments, {
+        'cwd': cwd
+        , 'input': text
+      });
+    if (!result.status) {
+      return result.stdout.toString();
     } else {
+      vscode.window.showWarningMessage(result.stderr.toString().split('\n')[0]);
       return '';
     }
   }
@@ -77,17 +79,14 @@ class HindentFormatEditsProvider implements
 }
 
 export function activate(context: vscode.ExtensionContext) {
-  // TODO Do not activate, if hindent cannot be executed.
   let hindentFormatProvider = new HindentFormatEditsProvider();
 
-  vscode.languages.registerDocumentFormattingEditProvider(
-    {scheme: '', language: 'haskell'}, hindentFormatProvider);
-  vscode.languages.registerDocumentRangeFormattingEditProvider(
-    {scheme: '', language: 'haskell'}, hindentFormatProvider);
-
-  vscode.workspace.onDidChangeConfiguration(function (event) {
-    hindentFormatProvider.configure();
-  });
+  if (hindentFormatProvider.hindentAvailable) {
+    vscode.languages.registerDocumentFormattingEditProvider(
+      'haskell', hindentFormatProvider);
+    vscode.languages.registerDocumentRangeFormattingEditProvider(
+      'haskell', hindentFormatProvider);
+  }
 }
 
 export function deactivate() { }

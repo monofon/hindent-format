@@ -6,14 +6,14 @@ to format Haskell source code. It supports the standard *Format Document* and
 
 ## Features
 
-The pallet command *Hindent: Format Document or Selection* is provided. If
+The palette command *Hindent: Format Document or Selection* is provided. If
 multiple formatters are registered for Haskell documents, this command can be
 used to invoke this specific formatter.
 
 ## Configuration
 
 `hindent` can be moderately configured by placing a `.hindent.yaml` file in the
-workspace or user home directories. The default configuration is:
+workspace directory or the user's home directory. The default configuration is:
 
 ``` {.yaml}
 indent-size: 2

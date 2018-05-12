@@ -1,12 +1,12 @@
 {
     "name": "hindent-format",
-    "displayName": "Hindent Format",
-    "description": "Format Haskell source code with hindent.",
+    "displayName": "hindent-format",
+    "description": "Use hindent to format Haskell code.",
     "repository": {
         "type": "git",
         "url": "https://github.com/monofon/hindent-format"
     },
-    "version": "0.0.6",
+    "version": "0.0.7",
     "publisher": "monofon",
     "engines": {
         "vscode": "^1.23.0"
@@ -17,7 +17,7 @@
     "activationEvents": [
         "onLanguage:haskell"
     ],
-    "main": "./out/src/extension",
+    "main": "./out/extension",
     "contributes": {
         "configuration": {
             "type": "object",
@@ -38,7 +38,14 @@
                     "description": "Enable hindent formatting."
                 }
             }
-        }
+        },
+        "commands": [
+            {
+                "command": "hindent-format.format",
+                "title": "Format Document or Selection",
+                "category": "Hindent"
+            }
+        ]
     },
     "scripts": {
         "vscode:prepublish": "npm run compile",

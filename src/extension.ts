@@ -39,11 +39,18 @@ class HindentFormatEditsProvider implements
             let documentPath = vscode.window.activeTextEditor.document.uri.fsPath;
             cwd = path.dirname(documentPath);
         }
-        let result = child_process.spawnSync(
-            this.command, this.arguments, {
-                'cwd': cwd
-                , 'input': text
-            });
+        let result = child_process.spawnSync(this.command, this.arguments, { cwd: cwd, input: text });
+
+        if (result.error) {
+            let error = <NodeJS.ErrnoException>result.error;
+            let message = error.message;
+            if (error.code === "ENOENT") {
+                message = "Could not locate hindent. Try specifying the hindent-format.command setting?";
+            }
+            vscode.window.showErrorMessage(message);
+            return '';
+        }
+
         if (!result.status) {
             return result.stdout.toString();
         } else {

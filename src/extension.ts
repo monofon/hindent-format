@@ -27,7 +27,7 @@ class HindentFormatEditsProvider implements
                 console.log("hindent-format: using executable: " + this.command);
             } else {
                 this.hindentAvailable = false;
-                vscode.window.showWarningMessage("hindent-format: cannot execute hindent command: " + this.command);
+                this.catchExecError(result.error);
             }
         }
     }
@@ -42,12 +42,7 @@ class HindentFormatEditsProvider implements
         let result = child_process.spawnSync(this.command, this.arguments, { cwd: cwd, input: text });
 
         if (result.error) {
-            let error = <NodeJS.ErrnoException>result.error;
-            let message = error.message;
-            if (error.code === "ENOENT") {
-                message = "Could not locate hindent. Try specifying the hindent-format.command setting?";
-            }
-            vscode.window.showErrorMessage(message);
+            this.catchExecError(result.error);
             return '';
         }
 
@@ -84,6 +79,14 @@ class HindentFormatEditsProvider implements
         } else {
             return [];
         }
+    }
+
+    catchExecError(error: NodeJS.ErrnoException) {
+        let message = error.message;
+        if (error.code === "ENOENT") {
+            message = `hindent-format: Could not execute ${this.command}. Try specifying the hindent-format.command setting?`;
+        }
+        vscode.window.showErrorMessage(message);
     }
 }
 

@@ -21,7 +21,7 @@ class HindentFormatEditsProvider implements
 
         if (this.enable) {
             let result = child_process.spawnSync(this.command, ['--version']);
-            if (!result.status) {
+            if (!result.error) {
                 this.hindentAvailable = true;
 
                 console.log("hindent-format: using executable: " + this.command);

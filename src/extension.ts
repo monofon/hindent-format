@@ -21,13 +21,13 @@ class HindentFormatEditsProvider implements
 
         if (this.enable) {
             let result = child_process.spawnSync(this.command, ['--version']);
-            if (!result.status) {
+            if (!result.error) {
                 this.hindentAvailable = true;
 
                 console.log("hindent-format: using executable: " + this.command);
             } else {
                 this.hindentAvailable = false;
-                vscode.window.showWarningMessage("hindent-format: cannot execute hindent command: " + this.command);
+                this.catchExecError(result.error);
             }
         }
     }
@@ -39,11 +39,13 @@ class HindentFormatEditsProvider implements
             let documentPath = vscode.window.activeTextEditor.document.uri.fsPath;
             cwd = path.dirname(documentPath);
         }
-        let result = child_process.spawnSync(
-            this.command, this.arguments, {
-                'cwd': cwd
-                , 'input': text
-            });
+        let result = child_process.spawnSync(this.command, this.arguments, { cwd: cwd, input: text });
+
+        if (result.error) {
+            this.catchExecError(result.error);
+            return '';
+        }
+
         if (!result.status) {
             return result.stdout.toString();
         } else {
@@ -77,6 +79,14 @@ class HindentFormatEditsProvider implements
         } else {
             return [];
         }
+    }
+
+    catchExecError(error: NodeJS.ErrnoException) {
+        let message = error.message;
+        if (error.code === "ENOENT") {
+            message = `hindent-format: Could not execute ${this.command}. Try specifying the hindent-format.command setting?`;
+        }
+        vscode.window.showErrorMessage(message);
     }
 }
 

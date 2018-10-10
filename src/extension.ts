@@ -20,7 +20,7 @@ class HindentFormatEditsProvider implements
         this.command = config.get('command', 'hindent');
 
         if (this.enable) {
-            let result = child_process.spawnSync(this.command, ['--version']);
+            let result = child_process.spawnSync(this.command, ['--version'], { shell: true });
             if (!result.error) {
                 this.hindentAvailable = true;
 
@@ -39,7 +39,7 @@ class HindentFormatEditsProvider implements
             let documentPath = vscode.window.activeTextEditor.document.uri.fsPath;
             cwd = path.dirname(documentPath);
         }
-        let result = child_process.spawnSync(this.command, this.arguments, { cwd: cwd, input: text });
+        let result = child_process.spawnSync(this.command, this.arguments, { cwd: cwd, input: text, shell: true });
 
         if (result.error) {
             this.catchExecError(result.error);

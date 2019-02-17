@@ -34,3 +34,9 @@ This extension contributes the following settings:
 -   `hindent-format.enable`: enable/disable this extension (default: `true`)
 -   `hindent-format.command`: set the path to the `hindent` executable, no
     arguments should be specified here (default: `hindent`)
+
+## Extension Command
+
+This extension contributes the following command:
+
+-  `hindent-format.format`: Hindent: Format Document or Selection

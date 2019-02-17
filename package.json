@@ -1,64 +1,64 @@
 {
-    "name": "hindent-format",
-    "displayName": "hindent-format",
-    "description": "Use hindent to format Haskell code.",
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/monofon/hindent-format"
-    },
-    "version": "0.0.10",
-    "publisher": "monofon",
-    "engines": {
-        "vscode": "^1.23.0"
-    },
-    "categories": [
-        "Formatters"
-    ],
-    "activationEvents": [
-        "onLanguage:haskell"
-    ],
-    "main": "./out/extension",
-    "contributes": {
-        "configuration": {
-            "type": "object",
-            "title": "Hindent configuration",
-            "properties": {
-                "hindent-format.command": {
-                    "type": [
-                        "string"
-                    ],
-                    "default": "hindent",
-                    "description": "Specifies the hindent invocation with options."
-                },
-                "hindent-format.enable": {
-                    "type": [
-                        "boolean"
-                    ],
-                    "default": "true",
-                    "description": "Enable hindent formatting."
-                }
-            }
+  "name": "hindent-format",
+  "displayName": "hindent-format",
+  "description": "Use hindent to format Haskell code.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/monofon/hindent-format"
+  },
+  "version": "0.0.11",
+  "publisher": "monofon",
+  "engines": {
+    "vscode": "^1.23.0"
+  },
+  "categories": [
+    "Formatters"
+  ],
+  "activationEvents": [
+    "onLanguage:haskell"
+  ],
+  "main": "./out/extension",
+  "contributes": {
+    "configuration": {
+      "type": "object",
+      "title": "Hindent configuration",
+      "properties": {
+        "hindent-format.command": {
+          "type": [
+            "string"
+          ],
+          "default": "hindent",
+          "description": "Specifies the hindent invocation with options."
         },
-        "commands": [
-            {
-                "command": "hindent-format.format",
-                "title": "Format Document or Selection",
-                "category": "Hindent"
-            }
-        ]
+        "hindent-format.enable": {
+          "type": [
+            "boolean"
+          ],
+          "default": "true",
+          "description": "Enable hindent formatting."
+        }
+      }
     },
-    "scripts": {
-        "vscode:prepublish": "npm run compile",
-        "compile": "tsc -p ./",
-        "watch": "tsc -watch -p ./",
-        "postinstall": "node ./node_modules/vscode/bin/install",
-        "test": "npm run compile && node ./node_modules/vscode/bin/test"
-    },
-    "devDependencies": {
-        "typescript": "^2.6.1",
-        "vscode": "^1.1.6",
-        "tslint": "^5.8.0",
-        "@types/node": "^7.0.43",
-        "@types/mocha": "^2.2.42"
-    }
+    "commands": [
+      {
+        "command": "hindent-format.format",
+        "title": "Format Document or Selection",
+        "category": "Hindent"
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "postinstall": "node ./node_modules/vscode/bin/install",
+    "test": "npm run compile && node ./node_modules/vscode/bin/test"
+  },
+  "devDependencies": {
+    "@types/mocha": "^2.2.42",
+    "@types/node": "^7.10.3",
+    "tslint": "^5.12.1",
+    "typescript": "^2.9.2",
+    "vscode": "^1.1.29"
+  }
 }
